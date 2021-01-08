@@ -1,0 +1,11 @@
+rootProject.name = "tabuyos-microservice"
+include("eureka")
+include("power")
+include("power1")
+include("rpc:common")
+include("rpc:consumer")
+include("rpc:provider")
+include("rpc:test")
+include("user")
+include("zuul")
+include("config")
