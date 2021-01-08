@@ -43,7 +43,6 @@ temp
 .attach_*
 *.html
 html_parse
-application-*.yml
 
 # non-ignore file
 !.gitignore
