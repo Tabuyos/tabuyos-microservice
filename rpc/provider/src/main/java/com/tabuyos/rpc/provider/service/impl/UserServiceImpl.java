@@ -28,16 +28,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
+  private final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    @Override
-    public String findUser(String id) {
-        log.info(id);
-        return "exec findUser";
-    }
+  @Override
+  public String findUser(String id) {
+    log.info(id);
+    return "exec findUser";
+  }
 
-    @Override
-    public String findAll() {
-        return "exec findAll";
-    }
+  @Override
+  public String findAll() {
+    return "exec findAll";
+  }
 }

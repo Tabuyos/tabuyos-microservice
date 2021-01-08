@@ -15,7 +15,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Arrays;
 
 /**
@@ -42,46 +41,46 @@ import java.util.Arrays;
 @ChannelHandler.Sharable
 public class NettyServerHandler extends SimpleChannelInboundHandler<Request> implements ApplicationContextAware {
 
-    private ApplicationContext applicationContext;
-    private final Logger log = LoggerFactory.getLogger(NettyServerHandler.class);
+  private ApplicationContext applicationContext;
+  private final Logger log = LoggerFactory.getLogger(NettyServerHandler.class);
 
-    @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Request request) {
-        Response response = new Response();
-        response.setId(request.getId());
-        try {
-            log.info(request.toString());
-            Object handler = handler(request);
+  @Override
+  protected void channelRead0(ChannelHandlerContext ctx, Request request) {
+    Response response = new Response();
+    response.setId(request.getId());
+    try {
+      log.info(request.toString());
+      Object handler = handler(request);
 //            log.info("返回结果是: " + handler);
-            response.setData(handler);
-        } catch (Exception e) {
-            response.setMessage(e.toString());
-            e.printStackTrace();
-        }
-        log.info("响应内容: {}", response);
-        ctx.writeAndFlush(response);
+      response.setData(handler);
+    } catch (Exception e) {
+      response.setMessage(e.toString());
+      e.printStackTrace();
     }
+    log.info("响应内容: {}", response);
+    ctx.writeAndFlush(response);
+  }
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
+  @Override
+  public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    this.applicationContext = applicationContext;
+  }
 
-    private Object handler(Request request) throws ClassNotFoundException, InvocationTargetException {
-        Class<?> clazz = Class.forName(request.getClazz());
-        log.info("clazz: " + clazz);
-        Object bean = applicationContext.getBean(clazz);
-        log.info("bean: " + bean);
-        Class<?> beanClass = bean.getClass();
-        log.info("beanClass: " + beanClass);
-        String method = request.getMethod();
-        Class<?>[] parameterTypes = request.getParameterTypes();
-        Object[] parameters = request.getParameters();
-        FastClass fastClass = FastClass.create(beanClass);
-        System.out.println(Arrays.toString(parameterTypes));
-        log.info("method: " + method);
-        FastMethod fastMethod = fastClass.getMethod(method, parameterTypes);
-        log.info("开始调用cglib动态代理执行服务端方法......");
-        return fastMethod.invoke(bean, parameters);
-    }
+  private Object handler(Request request) throws ClassNotFoundException, InvocationTargetException {
+    Class<?> clazz = Class.forName(request.getClazz());
+    log.info("clazz: " + clazz);
+    Object bean = applicationContext.getBean(clazz);
+    log.info("bean: " + bean);
+    Class<?> beanClass = bean.getClass();
+    log.info("beanClass: " + beanClass);
+    String method = request.getMethod();
+    Class<?>[] parameterTypes = request.getParameterTypes();
+    Object[] parameters = request.getParameters();
+    FastClass fastClass = FastClass.create(beanClass);
+    System.out.println(Arrays.toString(parameterTypes));
+    log.info("method: " + method);
+    FastMethod fastMethod = fastClass.getMethod(method, parameterTypes);
+    log.info("开始调用cglib动态代理执行服务端方法......");
+    return fastMethod.invoke(bean, parameters);
+  }
 }

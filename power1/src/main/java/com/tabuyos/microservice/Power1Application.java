@@ -12,7 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication(scanBasePackages = {"com.tabuyos.microservice"})
 public class Power1Application {
-    public static void main(String[] args) {
-        SpringApplication.run(Power1Application.class);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(Power1Application.class);
+  }
 }

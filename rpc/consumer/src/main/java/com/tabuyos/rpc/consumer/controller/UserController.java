@@ -32,22 +32,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("user")
 public class UserController {
 
-    private final UserService userService;
-    private final Logger log = LoggerFactory.getLogger(UserController.class);
+  private final UserService userService;
+  private final Logger log = LoggerFactory.getLogger(UserController.class);
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+  public UserController(UserService userService) {
+    this.userService = userService;
+  }
 
-    @GetMapping("findUser/{id}")
-    public String findUser(@PathVariable("id") String id) {
-        log.info(userService.findUser(id));
-        return "find user ok.";
-    }
+  @GetMapping("findUser/{id}")
+  public String findUser(@PathVariable("id") String id) {
+    log.info(userService.findUser(id));
+    return "find user ok.";
+  }
 
-    @GetMapping("findAll")
-    public String findAll() {
-        log.info(userService.findAll());
-        return "find all ok.";
-    }
+  @GetMapping("findAll")
+  public String findAll() {
+    log.info(userService.findAll());
+    return "find all ok.";
+  }
 }

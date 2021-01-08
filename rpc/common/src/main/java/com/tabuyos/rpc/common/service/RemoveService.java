@@ -22,5 +22,5 @@ package com.tabuyos.rpc.common.service;
  */
 public interface RemoveService {
 
-    void remove(String key) throws Exception;
+  void remove(String key) throws Exception;
 }

@@ -6,7 +6,6 @@ import com.tabuyos.rpc.common.service.RemoveService;
 import com.tabuyos.rpc.common.service.impl.DiscoverServiceImpl;
 import com.tabuyos.rpc.common.service.impl.RegistryServiceImpl;
 import com.tabuyos.rpc.common.service.impl.RemoveServiceImpl;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.concurrent.TimeUnit;
 
@@ -33,32 +32,32 @@ import java.util.concurrent.TimeUnit;
 //@SpringBootApplication
 public class TestApplication {
 
-    static DiscoverService discoverService;
-    static RegistryService registryService;
-    static RemoveService removeService;
+  static DiscoverService discoverService;
+  static RegistryService registryService;
+  static RemoveService removeService;
 
-    public static void main(String[] args) throws Exception {
-        registryService = new RegistryServiceImpl("127.0.0.1:2181");
-        registryService.registry("rpc", "tabuyos4");
-        registryService.registry("rpc", "tabuyos0");
-        registryService.registry("rpc2", "tabuyos2");
-        TimeUnit.SECONDS.sleep(10);
+  public static void main(String[] args) throws Exception {
+    registryService = new RegistryServiceImpl("127.0.0.1:2181");
+    registryService.registry("rpc", "tabuyos4");
+    registryService.registry("rpc", "tabuyos0");
+    registryService.registry("rpc2", "tabuyos2");
+    TimeUnit.SECONDS.sleep(10);
 
-        discoverService = new DiscoverServiceImpl("127.0.0.1:2181");
-        String discover = discoverService.discover("rpc");
+    discoverService = new DiscoverServiceImpl("127.0.0.1:2181");
+    String discover = discoverService.discover("rpc");
 
-        removeService = new RemoveServiceImpl("127.0.0.1:2181");
-        removeService.remove("rpc");
+    removeService = new RemoveServiceImpl("127.0.0.1:2181");
+    removeService.remove("rpc");
 
-        discoverService = new DiscoverServiceImpl("127.0.0.1:2181");
-        String discover1 = discoverService.discover("rpc");
-        String discover2 = discoverService.discover("rpc2");
-        System.out.println("==================================");
-        System.out.println(discover);
-        System.out.println("---------");
-        System.out.println(discover1);
-        System.out.println("+++++++++");
-        System.out.println(discover2);
-        System.out.println("==================================");
-    }
+    discoverService = new DiscoverServiceImpl("127.0.0.1:2181");
+    String discover1 = discoverService.discover("rpc");
+    String discover2 = discoverService.discover("rpc2");
+    System.out.println("==================================");
+    System.out.println(discover);
+    System.out.println("---------");
+    System.out.println(discover1);
+    System.out.println("+++++++++");
+    System.out.println(discover2);
+    System.out.println("==================================");
+  }
 }

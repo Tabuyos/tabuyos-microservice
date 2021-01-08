@@ -29,28 +29,28 @@ import java.util.List;
  */
 public class NettyDecoder extends ByteToMessageDecoder {
 
-    private final Class<?> clazz;
-    private final Serializer serializer;
+  private final Class<?> clazz;
+  private final Serializer serializer;
 
-    public NettyDecoder(Class<?> clazz, Serializer serializer) {
-        this.clazz = clazz;
-        this.serializer = serializer;
-    }
+  public NettyDecoder(Class<?> clazz, Serializer serializer) {
+    this.clazz = clazz;
+    this.serializer = serializer;
+  }
 
-    @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-        if (in.readableBytes() < 4) {
-            return;
-        }
-        in.markReaderIndex();
-        int dataLength = in.readInt();
-        if (in.readableBytes() < dataLength) {
-            in.resetReaderIndex();
-            return;
-        }
-        byte[] bytes = new byte[dataLength];
-        in.readBytes(bytes);
-        Object object = serializer.deserializer(clazz, bytes);
-        out.add(object);
+  @Override
+  protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+    if (in.readableBytes() < 4) {
+      return;
     }
+    in.markReaderIndex();
+    int dataLength = in.readInt();
+    if (in.readableBytes() < dataLength) {
+      in.resetReaderIndex();
+      return;
+    }
+    byte[] bytes = new byte[dataLength];
+    in.readBytes(bytes);
+    Object object = serializer.deserializer(clazz, bytes);
+    out.add(object);
+  }
 }

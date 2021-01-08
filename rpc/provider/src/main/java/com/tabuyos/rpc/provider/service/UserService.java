@@ -21,6 +21,7 @@ package com.tabuyos.rpc.provider.service;
  * @since 0.1.0 - 12/14/20 3:09 PM
  */
 public interface UserService {
-    String findUser(String id);
-    String findAll();
+  String findUser(String id);
+
+  String findAll();
 }

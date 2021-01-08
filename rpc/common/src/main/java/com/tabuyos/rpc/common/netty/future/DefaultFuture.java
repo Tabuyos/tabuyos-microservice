@@ -24,31 +24,31 @@ import com.tabuyos.rpc.common.entity.Response;
  * @since 0.1.0 - 12/14/20 4:39 PM
  */
 public class DefaultFuture {
-    private Response response;
-    private volatile boolean isSucceed = false;
-    private final Object object = new Object();
+  private Response response;
+  private volatile boolean isSucceed = false;
+  private final Object object = new Object();
 
-    public Response getResponse(int timeout) {
-        synchronized (object) {
-            while (!isSucceed) {
-                try {
-                    object.wait(timeout);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            return response;
+  public Response getResponse(int timeout) {
+    synchronized (object) {
+      while (!isSucceed) {
+        try {
+          object.wait(timeout);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
         }
+      }
+      return response;
     }
+  }
 
-    public void setResponse(Response response) {
-        if (isSucceed) {
-            return;
-        }
-        synchronized (object) {
-            this.response = response;
-            this.isSucceed = true;
-            object.notify();
-        }
+  public void setResponse(Response response) {
+    if (isSucceed) {
+      return;
     }
+    synchronized (object) {
+      this.response = response;
+      this.isSucceed = true;
+      object.notify();
+    }
+  }
 }

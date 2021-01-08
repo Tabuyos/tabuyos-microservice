@@ -24,50 +24,50 @@ import java.io.Serializable;
  */
 public class User implements Serializable {
 
-    private static final long serialVersionUID = 3768450011986182023L;
-    /**
-     * user id
-     */
-    private String id;
-    /**
-     * user name
-     */
-    private String name;
-    /**
-     * user address
-     */
-    private String address;
+  private static final long serialVersionUID = 3768450011986182023L;
+  /**
+   * user id
+   */
+  private String id;
+  /**
+   * user name
+   */
+  private String name;
+  /**
+   * user address
+   */
+  private String address;
 
-    public String getId() {
-        return id;
-    }
+  public String getId() {
+    return id;
+  }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+  public void setId(String id) {
+    this.id = id;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public String getAddress() {
-        return address;
-    }
+  public String getAddress() {
+    return address;
+  }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
+  public void setAddress(String address) {
+    this.address = address;
+  }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "User{" +
+      "id='" + id + '\'' +
+      ", name='" + name + '\'' +
+      ", address='" + address + '\'' +
+      '}';
+  }
 }

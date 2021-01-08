@@ -7,7 +7,6 @@ import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.imps.CuratorFrameworkState;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
-import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,30 +34,30 @@ import java.util.concurrent.CountDownLatch;
  */
 public class RegistryServiceImpl implements RegistryService {
 
-    private final CuratorFramework curatorFramework;
-    private final Logger log = LoggerFactory.getLogger(RegistryServiceImpl.class);
-    private final CountDownLatch countDownLatch = new CountDownLatch(1);
+  private final CuratorFramework curatorFramework;
+  private final Logger log = LoggerFactory.getLogger(RegistryServiceImpl.class);
+  private final CountDownLatch countDownLatch = new CountDownLatch(1);
 
-    public RegistryServiceImpl(String address) {
-        this.curatorFramework = CuratorFrameworkFactory.builder()
-                .connectString(address)
-                .sessionTimeoutMs(Constant.ZK_SESSION_TIMEOUT)
-                .retryPolicy(new ExponentialBackoffRetry(1000, 3))
-                .build();
-    }
+  public RegistryServiceImpl(String address) {
+    this.curatorFramework = CuratorFrameworkFactory.builder()
+      .connectString(address)
+      .sessionTimeoutMs(Constant.ZK_SESSION_TIMEOUT)
+      .retryPolicy(new ExponentialBackoffRetry(1000, 3))
+      .build();
+  }
 
-    @Override
-    public void registry(String key, String value) throws Exception {
-        CuratorFrameworkState state = curatorFramework.getState();
-        if (!state.equals(CuratorFrameworkState.STARTED)) {
-            log.info("zookeeper 客户端启动");
-            curatorFramework.start();
-        }
-        String data = key + "=" + value;
-        String path = Constant.ZK_CHILDREN_PATH;
-        curatorFramework.create()
-                .creatingParentsIfNeeded()
-                .withMode(CreateMode.EPHEMERAL_SEQUENTIAL)
-                .forPath(path, data.getBytes());
+  @Override
+  public void registry(String key, String value) throws Exception {
+    CuratorFrameworkState state = curatorFramework.getState();
+    if (!state.equals(CuratorFrameworkState.STARTED)) {
+      log.info("zookeeper 客户端启动");
+      curatorFramework.start();
     }
+    String data = key + "=" + value;
+    String path = Constant.ZK_CHILDREN_PATH;
+    curatorFramework.create()
+      .creatingParentsIfNeeded()
+      .withMode(CreateMode.EPHEMERAL_SEQUENTIAL)
+      .forPath(path, data.getBytes());
+  }
 }

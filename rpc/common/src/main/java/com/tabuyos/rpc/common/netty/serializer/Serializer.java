@@ -24,20 +24,22 @@ import java.io.IOException;
  */
 public interface Serializer {
 
-    /**
-     * 将对象进行序列化
-     * @param object 待序列化的对象
-     * @return 二进制流
-     * @throws IOException 抛出IO异常
-     */
-    byte[] serializer(Object object) throws IOException;
+  /**
+   * 将对象进行序列化
+   *
+   * @param object 待序列化的对象
+   * @return 二进制流
+   * @throws IOException 抛出IO异常
+   */
+  byte[] serializer(Object object) throws IOException;
 
-    /**
-     * 反序列化从而得到对象
-     * @param clazz 反序列化后的对象类型
-     * @param bytes 待反序列化的二进制流
-     * @return 反序列化后的对象
-     * @throws IOException 抛出IO异常
-     */
-    <T> T deserializer(Class<T> clazz, byte[] bytes) throws IOException;
+  /**
+   * 反序列化从而得到对象
+   *
+   * @param clazz 反序列化后的对象类型
+   * @param bytes 待反序列化的二进制流
+   * @return 反序列化后的对象
+   * @throws IOException 抛出IO异常
+   */
+  <T> T deserializer(Class<T> clazz, byte[] bytes) throws IOException;
 }

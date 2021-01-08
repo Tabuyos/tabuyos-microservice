@@ -24,63 +24,63 @@ import java.io.Serializable;
  */
 public class Response implements Serializable {
 
-    private static final long serialVersionUID = 4661941709679239401L;
-    /**
-     * 请求唯一标识号
-     */
-    private String id;
-    /**
-     * 响应码
-     */
-    private int code;
-    /**
-     * 错误消息
-     */
-    private String message;
-    /**
-     * 响应数据
-     */
-    private Object data;
+  private static final long serialVersionUID = 4661941709679239401L;
+  /**
+   * 请求唯一标识号
+   */
+  private String id;
+  /**
+   * 响应码
+   */
+  private int code;
+  /**
+   * 错误消息
+   */
+  private String message;
+  /**
+   * 响应数据
+   */
+  private Object data;
 
-    public String getId() {
-        return id;
-    }
+  public String getId() {
+    return id;
+  }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+  public void setId(String id) {
+    this.id = id;
+  }
 
-    public int getCode() {
-        return code;
-    }
+  public int getCode() {
+    return code;
+  }
 
-    public void setCode(int code) {
-        this.code = code;
-    }
+  public void setCode(int code) {
+    this.code = code;
+  }
 
-    public String getMessage() {
-        return message;
-    }
+  public String getMessage() {
+    return message;
+  }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+  public void setMessage(String message) {
+    this.message = message;
+  }
 
-    public Object getData() {
-        return data;
-    }
+  public Object getData() {
+    return data;
+  }
 
-    public void setData(Object data) {
-        this.data = data;
-    }
+  public void setData(Object data) {
+    this.data = data;
+  }
 
-    @Override
-    public String toString() {
-        return "Response{" +
-                "id='" + id + '\'' +
-                ", code=" + code +
-                ", message='" + message + '\'' +
-                ", data=" + data +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "Response{" +
+      "id='" + id + '\'' +
+      ", code=" + code +
+      ", message='" + message + '\'' +
+      ", data=" + data +
+      '}';
+  }
 }

@@ -25,13 +25,13 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserServiceImpl implements UserService {
-    @Override
-    public String findUser(String id) {
-        return "findUser-client";
-    }
+  @Override
+  public String findUser(String id) {
+    return "findUser-client";
+  }
 
-    @Override
-    public String findAll() {
-        return "findAll-client";
-    }
+  @Override
+  public String findAll() {
+    return "findAll-client";
+  }
 }

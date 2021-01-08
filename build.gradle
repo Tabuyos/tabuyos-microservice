@@ -14,85 +14,85 @@ def dependencyManagementVersion = "1.0.10.RELEASE"
 
 
 allprojects {
-    group(groupId)
-    version(projectVersion)
+  group(groupId)
+  version(projectVersion)
 
-    repositories {
-        mavenLocal()
-        maven {
-            url "https://maven.aliyun.com/repository/public"
-            name "AliyunPublic"
-        }
-        mavenCentral()
+  repositories {
+    mavenLocal()
+    maven {
+      url "https://maven.aliyun.com/repository/public"
+      name "AliyunPublic"
     }
+    mavenCentral()
+  }
 }
 
 subprojects {
-    apply plugin: "java"
+  apply plugin: "java"
 
-    repositories {
-        mavenCentral()
+  repositories {
+    mavenCentral()
+  }
+
+  configurations {
+    developmentOnly
+    runtimeClasspath {
+      extendsFrom developmentOnly
     }
-
-    configurations {
-        developmentOnly
-        runtimeClasspath {
-            extendsFrom developmentOnly
-        }
-        compileOnly {
-            extendsFrom annotationProcessor
-        }
+    compileOnly {
+      extendsFrom annotationProcessor
     }
+  }
 
-    dependencies {
-        implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
-        implementation platform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
-        implementation("org.springframework.boot:spring-boot-starter-web")
-        implementation("org.springframework.boot:spring-boot-starter-webflux")
-        implementation("com.fasterxml.jackson.core:jackson-databind")
-        implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
-        implementation("org.springframework.boot:spring-boot-starter-log4j2")
-        implementation("cn.hutool:hutool-all:$hutoolVersion")
-        implementation("org.mariadb.jdbc:mariadb-java-client:$mariadbVersion")
-        implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:$mybatisSpringVersion")
-        implementation("com.baomidou:mybatis-plus-boot-starter:$mybatisPlusVersion")
+  dependencies {
+    implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+    implementation platform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("com.fasterxml.jackson.core:jackson-databind")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
+    implementation("org.springframework.boot:spring-boot-starter-log4j2")
+    implementation("cn.hutool:hutool-all:${hutoolVersion}")
+    implementation("org.mariadb.jdbc:mariadb-java-client:${mariadbVersion}")
+    implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:${mybatisSpringVersion}")
+    implementation("com.baomidou:mybatis-plus-boot-starter:${mybatisPlusVersion}")
 
-        testImplementation("org.junit.jupiter:junit-jupiter:$junitJupiterVersion")
-        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    testImplementation("org.junit.jupiter:junit-jupiter:${junitJupiterVersion}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 
-        developmentOnly("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
-        annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}")
+    developmentOnly("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}")
+  }
+
+  configurations {
+    all {
+      implementation.exclude group: "org.springframework.boot", module: "spring-boot-starter-logging"
     }
+  }
 
-    configurations {
-        all {
-            implementation.exclude group: "org.springframework.boot", module: "spring-boot-starter-logging"
-        }
+  compileJava.inputs.files(processResources)
+
+  test {
+    useJUnitPlatform()
+    jvmArgs("--illegal-access=deny")
+    jvmArgs("--add-opens", "java.base/java.lang.invoke=ALL-UNNAMED")
+  }
+
+  java {
+    sourceCompatibility = JavaVersion.VERSION_15
+    targetCompatibility = JavaVersion.VERSION_15
+  }
+
+  tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+  }
+
+  task createSrcDirs {
+    sourceSets*.java.srcDirs*.each {
+      it.mkdirs()
     }
-
-    compileJava.inputs.files(processResources)
-
-    test {
-        useJUnitPlatform()
-        jvmArgs("--illegal-access=deny")
-        jvmArgs("--add-opens", "java.base/java.lang.invoke=ALL-UNNAMED")
+    sourceSets*.resources.srcDirs*.each {
+      it.mkdirs()
     }
-
-    java {
-        sourceCompatibility = JavaVersion.VERSION_15
-        targetCompatibility = JavaVersion.VERSION_15
-    }
-
-    tasks.withType(JavaCompile) {
-        options.encoding = "UTF-8"
-    }
-
-    task createSrcDirs {
-        sourceSets*.java.srcDirs*.each {
-            it.mkdirs()
-        }
-        sourceSets*.resources.srcDirs*.each{
-            it.mkdirs()
-        }
-    }
+  }
 }
