@@ -1,0 +1,38 @@
+server:
+  port: 8003
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+  application:
+    name: gateway
+  security:
+    user:
+      name: root
+      password: root
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/java
+      exclude: WEB-INF/**
+    livereload:
+      port: 35735
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}-${spring.cloud.client.ip-address}:${server.port}
+    hostname: ${spring.application.name}
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
+    prefer-ip-address: true
+  client:
+    enabled: true
+    healthcheck:
+      enabled: true
+    serviceUrl:
+      defaultZone: http://root:root@${spring.cloud.client.ip-address}:8002/eureka/
+
+logging:
+  level:
+    root: info

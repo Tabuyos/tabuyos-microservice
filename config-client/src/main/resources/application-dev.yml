@@ -1,0 +1,49 @@
+server:
+  port: 8011
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+    import: optional:configserver:http://root:root@localhost:8001
+  application:
+    name: a-bootiful-client
+  security:
+    user:
+      name: root
+      password: root
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/java
+      exclude: WEB-INF/**
+    livereload:
+      port: 35732
+  cloud:
+    config:
+      label: main
+      profile: default
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}-${spring.cloud.client.ip-address}:${server.port}
+    hostname: ${spring.application.name}
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
+    prefer-ip-address: true
+  client:
+    enabled: true
+    healthcheck:
+      enabled: true
+    serviceUrl:
+      defaultZone: http://root:root@${spring.cloud.client.ip-address}:8002/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+logging:
+  level:
+    root: info
