@@ -8,9 +8,21 @@ def hutoolVersion = "5.5.1"
 def mariadbVersion = "2.6.0"
 def mybatisSpringVersion = "2.1.4"
 def mybatisPlusVersion = "3.4.1"
-def springCloudVersion = "2020.0.0"
-def springBootVersion = "2.4.1"
+def springCloudVersion = "2020.0.1"
+def springBootVersion = "2.4.2"
 def dependencyManagementVersion = "1.0.10.RELEASE"
+def removeParentSrc = true
+
+static def deleteDirectory(File file) {
+  if (file.isFile()) {
+    return file.delete()
+  } else {
+    file.listFiles().each {
+      deleteDirectory(it)
+    }
+  }
+  return file.delete()
+}
 
 
 allprojects {
@@ -97,6 +109,20 @@ subprojects {
     }
     sourceSets*.resources.srcDirs*.each {
       it.mkdirs()
+    }
+  }
+
+  task createBuildScript {
+    dependsOn(createSrcDirs)
+    File file = new File("${projectDir}${File.separator}build.gradle")
+    if (!file.exists()) {
+      file.createNewFile()
+    }
+    if (removeParentSrc) {
+      file = new File("${file.getParentFile().getParent()}${File.separator}src")
+      if (file.exists()) {
+        deleteDirectory(file)
+      }
     }
   }
 }
