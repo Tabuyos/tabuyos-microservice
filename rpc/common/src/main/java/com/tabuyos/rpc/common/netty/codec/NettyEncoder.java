@@ -27,20 +27,20 @@ import io.netty.handler.codec.MessageToByteEncoder;
  */
 public class NettyEncoder extends MessageToByteEncoder<Object> {
 
-    private final Class<?> clazz;
-    private final Serializer serializer;
+  private final Class<?> clazz;
+  private final Serializer serializer;
 
-    public NettyEncoder(Class<?> clazz, Serializer serializer) {
-        this.clazz = clazz;
-        this.serializer = serializer;
-    }
+  public NettyEncoder(Class<?> clazz, Serializer serializer) {
+    this.clazz = clazz;
+    this.serializer = serializer;
+  }
 
-    @Override
-    protected void encode(ChannelHandlerContext ctx, Object in, ByteBuf out) throws Exception {
-        if (clazz != null && clazz.isInstance(in)) {
-            byte[] bytes = this.serializer.serializer(in);
-            out.writeInt(bytes.length);
-            out.writeBytes(bytes);
-        }
+  @Override
+  protected void encode(ChannelHandlerContext ctx, Object in, ByteBuf out) throws Exception {
+    if (clazz != null && clazz.isInstance(in)) {
+      byte[] bytes = this.serializer.serializer(in);
+      out.writeInt(bytes.length);
+      out.writeBytes(bytes);
     }
+  }
 }

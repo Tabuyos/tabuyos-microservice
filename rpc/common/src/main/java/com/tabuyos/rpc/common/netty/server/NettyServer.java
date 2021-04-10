@@ -46,63 +46,63 @@ import javax.annotation.PreDestroy;
 @Component
 public class NettyServer implements InitializingBean {
 
-    @Value("${rpc.server.address}")
-    private String serverAddress;
-    private EventLoopGroup boss = null;
-    private EventLoopGroup worker = null;
-    private final NettyServerHandler nettyServerHandler;
-    private final Logger log = LoggerFactory.getLogger(NettyServerHandler.class);
+  @Value("${rpc.server.address}")
+  private String serverAddress;
+  private EventLoopGroup boss = null;
+  private EventLoopGroup worker = null;
+  private final NettyServerHandler nettyServerHandler;
+  private final Logger log = LoggerFactory.getLogger(NettyServerHandler.class);
 
-    public NettyServer(NettyServerHandler nettyServerHandler) {
-        this.nettyServerHandler = nettyServerHandler;
-    }
+  public NettyServer(NettyServerHandler nettyServerHandler) {
+    this.nettyServerHandler = nettyServerHandler;
+  }
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        RegistryService registry = new RegistryServiceImpl("127.0.0.1:2181");
-        log.info("开始调用 NettyServer#afterPropertiesSet();");
-        start(registry);
-    }
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    RegistryService registry = new RegistryServiceImpl("127.0.0.1:2181");
+    log.info("开始调用 NettyServer#afterPropertiesSet();");
+    start(registry);
+  }
 
-    public void start(RegistryService registry) throws Exception {
-        boss = new NioEventLoopGroup();
-        worker = new NioEventLoopGroup();
-        registry.registry("rpc", serverAddress);
-        ServerBootstrap serverBootstrap = new ServerBootstrap();
-        serverBootstrap.group(boss, worker)
-                .channel(NioServerSocketChannel.class)
-                .option(ChannelOption.SO_BACKLOG, 1024)
-                .childHandler(childHandler());
-        bind(serverBootstrap, 8888);
-    }
+  public void start(RegistryService registry) throws Exception {
+    boss = new NioEventLoopGroup();
+    worker = new NioEventLoopGroup();
+    registry.registry("rpc", serverAddress);
+    ServerBootstrap serverBootstrap = new ServerBootstrap();
+    serverBootstrap.group(boss, worker)
+      .channel(NioServerSocketChannel.class)
+      .option(ChannelOption.SO_BACKLOG, 1024)
+      .childHandler(childHandler());
+    bind(serverBootstrap, 8888);
+  }
 
-    private ChannelInitializer<SocketChannel> childHandler() {
-        return new ChannelInitializer<SocketChannel>() {
-            @Override
-            protected void initChannel(SocketChannel ch) {
-                ChannelPipeline pipeline = ch.pipeline();
-                pipeline.addLast(new NettyEncoder(Response.class, new JsonSerializer()));
-                pipeline.addLast(new NettyDecoder(Request.class, new JsonSerializer()));
-                pipeline.addLast(nettyServerHandler);
-            }
-        };
-    }
+  private ChannelInitializer<SocketChannel> childHandler() {
+    return new ChannelInitializer<SocketChannel>() {
+      @Override
+      protected void initChannel(SocketChannel ch) {
+        ChannelPipeline pipeline = ch.pipeline();
+        pipeline.addLast(new NettyEncoder(Response.class, new JsonSerializer()));
+        pipeline.addLast(new NettyDecoder(Request.class, new JsonSerializer()));
+        pipeline.addLast(nettyServerHandler);
+      }
+    };
+  }
 
-    public void bind(final ServerBootstrap bootstrap, int port) {
-        bootstrap.bind(port).addListener(future -> {
-            if (future.isSuccess()) {
-                log.info("端口绑定成功: " + port);
-            } else {
-                log.info("端口绑定失败: " + port);
-                bind(bootstrap, port + 1);
-            }
-        });
-    }
+  public void bind(final ServerBootstrap bootstrap, int port) {
+    bootstrap.bind(port).addListener(future -> {
+      if (future.isSuccess()) {
+        log.info("端口绑定成功: " + port);
+      } else {
+        log.info("端口绑定失败: " + port);
+        bind(bootstrap, port + 1);
+      }
+    });
+  }
 
-    @PreDestroy
-    public void destroy() throws InterruptedException {
-        boss.shutdownGracefully().sync();
-        worker.shutdownGracefully().sync();
-        log.info("关闭Netty");
-    }
+  @PreDestroy
+  public void destroy() throws InterruptedException {
+    boss.shutdownGracefully().sync();
+    worker.shutdownGracefully().sync();
+    log.info("关闭Netty");
+  }
 }

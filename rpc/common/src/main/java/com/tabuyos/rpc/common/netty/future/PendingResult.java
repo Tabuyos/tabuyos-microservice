@@ -27,17 +27,17 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 0.1.0 - 12/14/20 4:39 PM
  */
 public class PendingResult {
-    private final Map<String, ResultFuture> map = new ConcurrentHashMap<>();
+  private final Map<String, ResultFuture> map = new ConcurrentHashMap<>();
 
-    public void add(String id, ResultFuture future) {
-        this.map.put(id, future);
-    }
+  public void add(String id, ResultFuture future) {
+    this.map.put(id, future);
+  }
 
-    public void set(String id, Response response) {
-        ResultFuture resultFuture = this.map.get(id);
-        if (resultFuture != null) {
-            resultFuture.setSuccess(response);
-            this.map.remove(id);
-        }
+  public void set(String id, Response response) {
+    ResultFuture resultFuture = this.map.get(id);
+    if (resultFuture != null) {
+      resultFuture.setSuccess(response);
+      this.map.remove(id);
     }
+  }
 }

@@ -25,76 +25,76 @@ import java.util.Arrays;
  */
 public class Request implements Serializable {
 
-    private static final long serialVersionUID = 6481413501932696241L;
-    /**
-     * 请求唯一标识号
-     */
-    private String id;
-    /**
-     * 类名
-     */
-    private String clazz;
-    /**
-     * 函数名称
-     */
-    private String method;
-    /**
-     * 参数类型
-     */
-    private Class<?>[] parameterTypes;
-    /**
-     * 参数列表
-     */
-    private Object[] parameters;
+  private static final long serialVersionUID = 6481413501932696241L;
+  /**
+   * 请求唯一标识号
+   */
+  private String id;
+  /**
+   * 类名
+   */
+  private String clazz;
+  /**
+   * 函数名称
+   */
+  private String method;
+  /**
+   * 参数类型
+   */
+  private Class<?>[] parameterTypes;
+  /**
+   * 参数列表
+   */
+  private Object[] parameters;
 
-    public String getId() {
-        return id;
-    }
+  public String getId() {
+    return id;
+  }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+  public void setId(String id) {
+    this.id = id;
+  }
 
-    public String getClazz() {
-        return clazz;
-    }
+  public String getClazz() {
+    return clazz;
+  }
 
-    public void setClazz(String clazz) {
-        this.clazz = clazz;
-    }
+  public void setClazz(String clazz) {
+    this.clazz = clazz;
+  }
 
-    public String getMethod() {
-        return method;
-    }
+  public String getMethod() {
+    return method;
+  }
 
-    public void setMethod(String method) {
-        this.method = method;
-    }
+  public void setMethod(String method) {
+    this.method = method;
+  }
 
-    public Class<?>[] getParameterTypes() {
-        return parameterTypes;
-    }
+  public Class<?>[] getParameterTypes() {
+    return parameterTypes;
+  }
 
-    public void setParameterTypes(Class<?>[] parameterTypes) {
-        this.parameterTypes = parameterTypes;
-    }
+  public void setParameterTypes(Class<?>[] parameterTypes) {
+    this.parameterTypes = parameterTypes;
+  }
 
-    public Object[] getParameters() {
-        return parameters;
-    }
+  public Object[] getParameters() {
+    return parameters;
+  }
 
-    public void setParameters(Object[] parameters) {
-        this.parameters = parameters;
-    }
+  public void setParameters(Object[] parameters) {
+    this.parameters = parameters;
+  }
 
-    @Override
-    public String toString() {
-        return "Request{" +
-                "id='" + id + '\'' +
-                ", className='" + clazz + '\'' +
-                ", methodName='" + method + '\'' +
-                ", parameterTypes=" + Arrays.toString(parameterTypes) +
-                ", parameters=" + Arrays.toString(parameters) +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "Request{" +
+      "id='" + id + '\'' +
+      ", className='" + clazz + '\'' +
+      ", methodName='" + method + '\'' +
+      ", parameterTypes=" + Arrays.toString(parameterTypes) +
+      ", parameters=" + Arrays.toString(parameters) +
+      '}';
+  }
 }

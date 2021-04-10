@@ -16,10 +16,10 @@ import java.util.Map;
 @RestController
 public class PowerController {
 
-    @GetMapping("/getPower")
-    public Object getPower() {
-        Map<String, Object> map = new HashMap<>(20);
-        map.put("key", "power1");
-        return map;
-    }
+  @GetMapping("/getPower")
+  public Object getPower() {
+    Map<String, Object> map = new HashMap<>(20);
+    map.put("key", "power1");
+    return map;
+  }
 }

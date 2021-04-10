@@ -22,5 +22,5 @@ package com.tabuyos.rpc.common.service;
  */
 public interface RegistryService {
 
-    void registry(String key, String value) throws Exception;
+  void registry(String key, String value) throws Exception;
 }

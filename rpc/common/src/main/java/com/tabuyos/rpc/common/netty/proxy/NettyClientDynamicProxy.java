@@ -34,42 +34,42 @@ import java.util.UUID;
  * @since 0.1.0 - 12/14/20 4:49 PM
  */
 public class NettyClientDynamicProxy<T> implements InvocationHandler {
-    private final Logger log = LoggerFactory.getLogger(NettyClientDynamicProxy.class);
-    private final Class<T> clazz;
+  private final Logger log = LoggerFactory.getLogger(NettyClientDynamicProxy.class);
+  private final Class<T> clazz;
 
-    private final DiscoverService discover = new DiscoverServiceImpl("127.0.0.1:2181");
+  private final DiscoverService discover = new DiscoverServiceImpl("127.0.0.1:2181");
 
-    public NettyClientDynamicProxy(Class<T> clazz) throws Exception {
-        this.clazz = clazz;
-    }
+  public NettyClientDynamicProxy(Class<T> clazz) throws Exception {
+    this.clazz = clazz;
+  }
 
-    @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        Request request = new Request();
-        String requestId = UUID.randomUUID().toString();
+  @Override
+  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    Request request = new Request();
+    String requestId = UUID.randomUUID().toString();
 
-        String className = method.getDeclaringClass().getName();
-        log.info(className);
-        String methodName = method.getName();
+    String className = method.getDeclaringClass().getName();
+    log.info(className);
+    String methodName = method.getName();
 
-        Class<?>[] parameterTypes = method.getParameterTypes();
+    Class<?>[] parameterTypes = method.getParameterTypes();
 
-        request.setId(requestId);
-        request.setClazz(className.replaceAll("consumer", "provider"));
-        request.setMethod(methodName);
-        request.setParameterTypes(parameterTypes);
-        request.setParameters(args);
-        log.info("请求内容: {}", request);
+    request.setId(requestId);
+    request.setClazz(className.replaceAll("consumer", "provider"));
+    request.setMethod(methodName);
+    request.setParameterTypes(parameterTypes);
+    request.setParameters(args);
+    log.info("请求内容: {}", request);
 
-        String address = discover.discover("rpc");
-        String[] arrays = address.split(":");
-        String host = arrays[0];
-        int port = Integer.parseInt(arrays[1]);
-        NettyClient nettyClient = new NettyClient(host, port);
-        log.info("开始连接服务端：{}", new Date());
-        nettyClient.connect();
-        Response send = nettyClient.send(request);
-        log.info("请求调用返回结果：{}", send.getData());
-        return send.getData();
-    }
+    String address = discover.discover("rpc");
+    String[] arrays = address.split(":");
+    String host = arrays[0];
+    int port = Integer.parseInt(arrays[1]);
+    NettyClient nettyClient = new NettyClient(host, port);
+    log.info("开始连接服务端：{}", new Date());
+    nettyClient.connect();
+    Response send = nettyClient.send(request);
+    log.info("请求调用返回结果：{}", send.getData());
+    return send.getData();
+  }
 }

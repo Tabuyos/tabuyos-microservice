@@ -36,74 +36,74 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class DiscoverServiceImpl implements DiscoverService {
 
-    private final CuratorFramework curatorFramework;
-    private final Logger log = LoggerFactory.getLogger(DiscoverServiceImpl.class);
-    private volatile List<String> dataList = new ArrayList<>();
+  private final CuratorFramework curatorFramework;
+  private final Logger log = LoggerFactory.getLogger(DiscoverServiceImpl.class);
+  private volatile List<String> dataList = new ArrayList<>();
 
-    public DiscoverServiceImpl(String address) throws Exception {
-        this.curatorFramework = CuratorFrameworkFactory
-                .builder()
-                .connectString(address)
-                .connectionTimeoutMs(Constant.ZK_CONNECTION_TIMEOUT)
-                .sessionTimeoutMs(Constant.ZK_SESSION_TIMEOUT)
-                .retryPolicy(new ExponentialBackoffRetry(1000, 3))
-                .build();
-        watchChildNode(curatorFramework);
+  public DiscoverServiceImpl(String address) throws Exception {
+    this.curatorFramework = CuratorFrameworkFactory
+      .builder()
+      .connectString(address)
+      .connectionTimeoutMs(Constant.ZK_CONNECTION_TIMEOUT)
+      .sessionTimeoutMs(Constant.ZK_SESSION_TIMEOUT)
+      .retryPolicy(new ExponentialBackoffRetry(1000, 3))
+      .build();
+    watchChildNode(curatorFramework);
+  }
+
+  public DiscoverServiceImpl(CuratorFramework curatorFramework) {
+    this.curatorFramework = curatorFramework;
+  }
+
+  private void watchChildNode(final CuratorFramework client) throws Exception {
+    CuratorFrameworkState state = client.getState();
+    if (!state.equals(CuratorFrameworkState.STARTED)) {
+      log.info("zookeeper 客户端启动");
+      client.start();
     }
-
-    public DiscoverServiceImpl(CuratorFramework curatorFramework) {
-        this.curatorFramework = curatorFramework;
-    }
-
-    private void watchChildNode(final CuratorFramework client) throws Exception {
-        CuratorFrameworkState state = client.getState();
-        if (!state.equals(CuratorFrameworkState.STARTED)) {
-            log.info("zookeeper 客户端启动");
-            client.start();
+    List<String> nodeList = client.getChildren().usingWatcher((Watcher) watchedEvent -> {
+      if (watchedEvent.getType() == Watcher.Event.EventType.NodeChildrenChanged) {
+        try {
+          watchChildNode(client);
+        } catch (Exception e) {
+          e.printStackTrace();
         }
-        List<String> nodeList = client.getChildren().usingWatcher((Watcher) watchedEvent -> {
-            if (watchedEvent.getType() == Watcher.Event.EventType.NodeChildrenChanged) {
-                try {
-                    watchChildNode(client);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).forPath(Constant.ZK_REGISTRY_PATH);
-        List<String> dataList = new ArrayList<>();
-        log.info("{}", nodeList);
-        for (String node : nodeList) {
-            byte[] data = client.getData().forPath(Constant.ZK_REGISTRY_PATH + "/" + node);
-            dataList.add(new String(data));
-        }
-        this.dataList = dataList;
+      }
+    }).forPath(Constant.ZK_REGISTRY_PATH);
+    List<String> dataList = new ArrayList<>();
+    log.info("{}", nodeList);
+    for (String node : nodeList) {
+      byte[] data = client.getData().forPath(Constant.ZK_REGISTRY_PATH + "/" + node);
+      dataList.add(new String(data));
     }
+    this.dataList = dataList;
+  }
 
-    @Override
-    public String discover(String key) {
-        log.info("{}", dataList);
-        String data = null;
-        List<String> address = getAddress(dataList, key);
-        int size = address.size();
-        log.info("发现与 {} 相关的节点: {}", key, address);
-        if (size > 0) {
-            if (size == 1) {
-                data = address.get(0);
-            } else {
-                data = address.get(ThreadLocalRandom.current().nextInt(size));
-            }
-        }
-        return data;
+  @Override
+  public String discover(String key) {
+    log.info("{}", dataList);
+    String data = null;
+    List<String> address = getAddress(dataList, key);
+    int size = address.size();
+    log.info("发现与 {} 相关的节点: {}", key, address);
+    if (size > 0) {
+      if (size == 1) {
+        data = address.get(0);
+      } else {
+        data = address.get(ThreadLocalRandom.current().nextInt(size));
+      }
     }
+    return data;
+  }
 
-    private List<String> getAddress(List<String> list, String prefix) {
-        List<String> rpcList = new ArrayList<>();
-        for (String el : list) {
-            String[] split = el.split("=");
-            if (split.length == 2 && prefix.equals(split[0])) {
-                rpcList.add(split[1]);
-            }
-        }
-        return rpcList;
+  private List<String> getAddress(List<String> list, String prefix) {
+    List<String> rpcList = new ArrayList<>();
+    for (String el : list) {
+      String[] split = el.split("=");
+      if (split.length == 2 && prefix.equals(split[0])) {
+        rpcList.add(split[1]);
+      }
     }
+    return rpcList;
+  }
 }

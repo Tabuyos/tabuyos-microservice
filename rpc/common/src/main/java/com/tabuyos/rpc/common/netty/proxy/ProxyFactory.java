@@ -27,23 +27,23 @@ import java.lang.reflect.Proxy;
  */
 public class ProxyFactory {
 
-    private static <T> T convert(Class<T> returnClass, Object value) {
-        try {
-            if (returnClass.isInstance(value)) {
-                System.out.println(3);
-                ObjectMapper mapper = new ObjectMapper();
-                mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-                return mapper.convertValue(value, returnClass);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+  private static <T> T convert(Class<T> returnClass, Object value) {
+    try {
+      if (returnClass.isInstance(value)) {
+        System.out.println(3);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        return mapper.convertValue(value, returnClass);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
     }
+    return null;
+  }
 
-    @SuppressWarnings("unchecked")
-    public static <T> T create(Class<T> interfaceClass) throws Exception {
-        Object object = Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class<?>[]{interfaceClass}, new NettyClientDynamicProxy<>(interfaceClass));
-        return (T) object;
-    }
+  @SuppressWarnings("unchecked")
+  public static <T> T create(Class<T> interfaceClass) throws Exception {
+    Object object = Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class<?>[]{interfaceClass}, new NettyClientDynamicProxy<>(interfaceClass));
+    return (T) object;
+  }
 }

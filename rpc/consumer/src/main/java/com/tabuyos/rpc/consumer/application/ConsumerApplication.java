@@ -30,11 +30,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication(scanBasePackages = {"com.tabuyos.rpc.consumer"})
 public class ConsumerApplication {
 
-    private final static Logger log = LoggerFactory.getLogger(ConsumerApplication.class);
+  private final static Logger log = LoggerFactory.getLogger(ConsumerApplication.class);
 
-    public static void main(String[] args) throws Exception {
-        SpringApplication.run(ConsumerApplication.class, args);
-        UserService helloService = ProxyFactory.create(UserService.class);
-        log.info("响应结果: {}", helloService.findUser("tabuyos-for-id"));
-    }
+  public static void main(String[] args) throws Exception {
+    SpringApplication.run(ConsumerApplication.class, args);
+    UserService helloService = ProxyFactory.create(UserService.class);
+    log.info("响应结果: {}", helloService.findUser("tabuyos-for-id"));
+  }
 }

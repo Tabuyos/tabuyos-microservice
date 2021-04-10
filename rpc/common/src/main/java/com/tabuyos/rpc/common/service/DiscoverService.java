@@ -22,5 +22,5 @@ package com.tabuyos.rpc.common.service;
  */
 public interface DiscoverService {
 
-    String discover(String key);
+  String discover(String key);
 }

@@ -28,18 +28,18 @@ import java.io.IOException;
  */
 public class JsonSerializer implements Serializer {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
-    private final Logger log = LoggerFactory.getLogger(JsonSerializer.class);
+  private final ObjectMapper objectMapper = new ObjectMapper();
+  private final Logger log = LoggerFactory.getLogger(JsonSerializer.class);
 
-    @Override
-    public byte[] serializer(Object object) throws IOException {
-        log.info("开始序列化！");
-        return objectMapper.writeValueAsBytes(object);
-    }
+  @Override
+  public byte[] serializer(Object object) throws IOException {
+    log.info("开始序列化！");
+    return objectMapper.writeValueAsBytes(object);
+  }
 
-    @Override
-    public <T> T deserializer(Class<T> clazz, byte[] bytes) throws IOException {
-        log.info("开始反序列化！");
-        return objectMapper.readValue(bytes, clazz);
-    }
+  @Override
+  public <T> T deserializer(Class<T> clazz, byte[] bytes) throws IOException {
+    log.info("开始反序列化！");
+    return objectMapper.readValue(bytes, clazz);
+  }
 }

@@ -28,9 +28,9 @@ import org.springframework.context.ConfigurableApplicationContext;
 @SpringBootApplication(scanBasePackages = {"com.tabuyos.rpc.provider", "com.tabuyos.rpc.common"})
 public class ProviderApplication {
 
-    public static void main(String[] args) throws Exception {
-        ConfigurableApplicationContext context = SpringApplication.run(ProviderApplication.class, args);
-        NettyServer bean = context.getBean(NettyServer.class);
-        System.out.println(bean.hashCode());
-    }
+  public static void main(String[] args) throws Exception {
+    ConfigurableApplicationContext context = SpringApplication.run(ProviderApplication.class, args);
+    NettyServer bean = context.getBean(NettyServer.class);
+    System.out.println(bean.hashCode());
+  }
 }

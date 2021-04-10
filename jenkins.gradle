@@ -1,0 +1,10 @@
+def os = System.getProperty("os.name")
+
+static def say() {
+  println("tabuyos, hello.")
+}
+task jenkinsScript {
+  println(os)
+  println("hello")
+  say()
+}
